@@ -7,7 +7,20 @@
 <%@page import="java.sql.ResultSet"%>
 <%@ page import="java.util.*,java.io.*"%>
 <%@ page import="org.cysecurity.cspf.jvl.model.DBConnect"%>
-
+<%!
+    // HTML encoding utility to prevent XSS attacks
+    private String escapeHtml(String input) {
+        if (input == null) {
+            return null;
+        }
+        return input.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#x27;")
+                    .replace("/", "&#x2F;");
+    }
+%>
 <%
 if(session.getAttribute("isLoggedIn")!=null)
 {
@@ -32,7 +45,7 @@ if(session.getAttribute("isLoggedIn")!=null)
                    out.print("<br/>-------------------<br/>Card Details:<br/>-------------------<br/>");
                    out.print("Card Number: "+rs1.getString("cardno")+"<br/>");
                    out.print("CVV: "+rs1.getString("cvv")+"<br/>");
-                   out.print("Expiry Date: "+rs1.getString("expirydate")+"<br/>");
+                   out.print("Expiry Date: "+escapeHtml(rs1.getString("expirydate"))+"<br/>");
                 }
                  else
                  {
